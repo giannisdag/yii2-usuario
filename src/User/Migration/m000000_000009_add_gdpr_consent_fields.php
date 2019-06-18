@@ -17,9 +17,13 @@ class m000000_000009_add_gdpr_consent_fields extends Migration
 {
     public function safeUp()
     {
-        $this->addColumn('{{%user}}', 'gdpr_consent', $this->boolean()->defaultValue(false));
+        $defVal = false;
+        if ($this->db->driverName === 'sqlsrv') {
+            $defVal = 'false';
+        }
+        $this->addColumn('{{%user}}', 'gdpr_consent', $this->boolean()->defaultValue($defVal));
         $this->addColumn('{{%user}}', 'gdpr_consent_date', $this->integer(11)->null());
-        $this->addColumn('{{%user}}', 'gdpr_deleted', $this->boolean()->defaultValue(false));
+        $this->addColumn('{{%user}}', 'gdpr_deleted', $this->boolean()->defaultValue($defVal));
     }
 
     public function safeDown()
